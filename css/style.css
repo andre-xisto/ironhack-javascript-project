@@ -1,0 +1,21 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('../images/bg.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-color: rgb(109, 38, 38);
+}
+
+canvas {
+  /* background-color: rgb(161, 101, 77); */
+  background-color: rgb(56, 56, 56, 0.2);
+}
