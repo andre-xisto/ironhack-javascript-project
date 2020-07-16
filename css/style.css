@@ -116,10 +116,16 @@ p {
   width: 30%;
 }
 
+.cat-logo {
+  flex-direction: column;
+  text-align: center;
+  margin-top: 10%;
+  margin-bottom: 10%;
+}
+
 .keyboard {
   width: 200px;
   flex-direction: column;
-  margin-top: 60%;
 }
 
 canvas {
