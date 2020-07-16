@@ -131,12 +131,19 @@ class Game {
     }
 
     if (this.player.score >= 15) {
-      this.levelUp();
+      this.level2();
+    }
+    if (this.player.score >= 30) {
+      this.level3();
     }
   }
 
-  levelUp() {
-    canvasElement.classList.add('canvas-lvl-up');
+  level2() {
+    canvasElement.classList.add('canvas-lvl-2');
+  }
+  level3() {
+    canvasElement.classList.add('canvas-lvl-3');
+    canvasElement.classList.remove('canvas-lvl-2');
   }
 
   clean() {
@@ -153,6 +160,8 @@ class Game {
     // Hit a BOMB
     if (!this.running && this.bomb === true && this.lostKitten === false) {
       context.save();
+      context.fillStyle = 'rgb(56, 56, 56, 0.5)';
+      context.fillRect(0, 200, 760, 250);
       context.font = '80px Righteous';
       context.fillStyle = 'firebrick';
       context.fillText('BAMMM!', 230, 300, 300, 200);
@@ -163,12 +172,15 @@ class Game {
     }
     if (!this.running && this.lostKitten === true) {
       context.save();
+      context.fillStyle = 'rgb(56, 56, 56, 0.5)';
+      context.fillRect(0, 200, 760, 250);
       context.font = '80px Righteous';
       context.fillStyle = 'firebrick';
-      context.fillText('OH NOESSS', 230, 300, 300, 200);
+      context.fillText('POOR KITTY', 230, 300, 300, 200);
       context.fillStyle = '#fff';
       context.font = '40px Righteous';
-      context.fillText('Hit the SPACE BAR to save more kittens', 130, 350, 500, 200);
+      context.fillText('Pick up more PARACHUTES next time!', 130, 350, 500, 200);
+      context.fillText('SPACE BAR to save more kittens', 150, 400, 450, 200);
       context.restore();
     }
   }
@@ -187,7 +199,8 @@ class Game {
     this.player.joker = 0;
     this.player.x = 80;
     this.loop();
-    canvasElement.classList.remove('canvas-lvl-up');
+    canvasElement.classList.remove('canvas-lvl-2');
+    canvasElement.classList.remove('canvas-lvl-3');
     this.lostKitten = false;
     this.bomb = false;
     this.running = true;

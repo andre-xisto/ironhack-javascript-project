@@ -110,9 +110,10 @@ p {
   flex-direction: row;
 }
 
-.col {
+.col:first-of-type {
   flex-direction: column;
   text-align: center;
+  width: 30%;
 }
 
 .keyboard {
@@ -122,15 +123,20 @@ p {
 }
 
 canvas {
-  margin: 5% 30%;
+  margin-top: 10%;
   background-color: rgb(56, 56, 56, 0.3);
 }
 
-.canvas-lvl-up {
-  background-image: url('../images/canvas-background.jpg');
+.canvas-lvl-2 {
+  background-image: url('../images/canvas-bg-2-level.jpg');
   background-repeat: no-repeat;
-
   background-position: center;
+}
+.canvas-lvl-3 {
+  background-image: url('../images/canvas-bg-3-level.jpg');
+  background-repeat: no-repeat;
+  background-position: left;
+  background-size: cover;
 }
 
 .none {
