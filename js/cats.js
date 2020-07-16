@@ -1,4 +1,4 @@
-// Fruit class
+// CATS CLASS
 class Cat {
   constructor(game, x, y, width, height, speed, imageIndex) {
     this.game = game;
@@ -9,7 +9,7 @@ class Cat {
     this.speed = speed;
     this.imageIndex = imageIndex;
 
-    this.imageObject = [
+    this.catObject = [
       {
         url: '/images/cat1.png',
         width: 497,
@@ -39,44 +39,18 @@ class Cat {
         width: 669,
         height: 470,
         ratio: 1
-      },
-      {
-        url: '/images/explosives.png',
-        width: 276,
-        height: 599,
-        ratio: 0.5
-      },
-      {
-        url: '/images/bomb.png',
-        width: 1668,
-        height: 1686,
-        ratio: 0.8
-      },
-      {
-        url: '/images/safe-breadnbutter.png',
-        width: 551,
-        height: 512,
-        ratio: 0.7
-      },
-      {
-        url: '/images/bigorna.png',
-        width: 605,
-        height: 413,
-        ratio: 0.9
       }
     ];
 
-    this.image = new Image();
-    this.imageIndex = randomNumber(0, 8);
-    this.image.src = this.imageObject[this.imageIndex].url;
+    // CATS
+    this.cat = new Image();
+    this.catIndex = randomNumber(0, 4);
+    this.cat.src = this.catObject[this.catIndex].url;
+    this.src = this.cat.src;
 
-    /*this.width = 
-      this.imageObject[this.imageIndex].width * (160 / this.imageObject[this.imageIndex].height);
-    this.height = 150;*/
-
-    const size = 150 * this.imageObject[this.imageIndex].ratio;
-    this.width = size;
-    this.height = this.imageObject[this.imageIndex].height * (size / this.imageObject[this.imageIndex].width);
+    const catSize = 150 * this.catObject[this.catIndex].ratio;
+    this.width = catSize;
+    this.height = this.catObject[this.catIndex].height * (catSize / this.catObject[this.catIndex].width);
   }
 
   runLogic() {
@@ -86,15 +60,11 @@ class Cat {
   paint() {
     const context = this.game.context;
     context.save();
-    context.drawImage(this.image, this.x, this.y, this.width, this.height);
+    context.drawImage(this.cat, this.x, this.y, this.width, this.height);
     context.restore();
     /*
     context.fillStyle = 'coral';
     context.fillRect(this.x, this.y, this.width, this.height);
     */
-  }
-
-  checkIntersection(player) {
-    return player.x + player.width > this.x && player.x < this.x + this.width && player.y + player.height - 100 > this.y && player.y - 60 < this.y + this.height;
   }
 }

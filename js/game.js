@@ -5,14 +5,8 @@ const snd = new Audio('./sounds/JackJohnson-PinaColadasSong.mp3'); // buffers au
 const pop = new Audio('./sounds/pop.mp3');
 const miau = new Audio('./sounds/miau.mp3');
 miau.volume = 0.2;
-
-function clearScreen() {
-  context.clearRect(0, 0, canvasElement.width, canvasElement.height);
-}
-
-function randomNumber(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
+const xplode = new Audio('./sounds/explosion.mp3');
+xplode.volume = 0.4;
 
 class Game {
   constructor(canvas) {
@@ -20,15 +14,17 @@ class Game {
     this.context = canvas.getContext('2d');
 
     this.player = new Basket(this);
-    this.cat = new Cat(this);
+    this.explosion = new Explosion(this);
     this.scoreboard = new Scoreboard(this);
 
     // First Cats of the Loop
     this.columns = [220, 380, 540];
-    this.cats = [];
+    this.row = [];
 
     this.setKeyBindings();
     this.running = true;
+    this.bomb = false;
+    this.lostKitten = false;
   }
 
   setKeyBindings() {
@@ -40,11 +36,11 @@ class Game {
           this.player.x - 90 > 0 ? (this.player.x -= 80) : '';
           this.player.x < 100 && this.player.score > 3 ? (this.player.score -= 3) : this.player.x < 100 ? (this.player.score = 0) : '';
           break;
-          case 'ArrowRight':
+        case 'ArrowRight':
           event.preventDefault();
           this.player.x + this.player.width + 90 <= canvasElement.width ? (this.player.x += 80) : '';
           break;
-          case ' ':
+        case ' ':
           event.preventDefault();
           this.restartGame();
           break;
@@ -54,81 +50,93 @@ class Game {
 
   runLogic() {
     this.player.runLogic();
-    
-    this.cats.length === 3 && (this.cats[0].imageIndex === this.cats[1].imageIndex) === this.cats[2].imageIndex ? (this.player.score += 30) : '';
-    
-    // Speed increase
-    const speed = randomNumber(4, 6) + (1 + this.player.score)/4;
 
-    // Add kittens to the array
-    if (this.cats.length < 1) {
-        this.cats.push(new Cat(this, 220, 30, 80, 130, speed, randomNumber(0, 11)));
-        this.cats.push(new Cat(this, 380, 30, 80, 130, speed, randomNumber(0, 11)));
-        this.cats.push(new Cat(this, 540, 30, 80, 130, speed, randomNumber(0, 11)));
+    // Speed increase // INCREASES WITH PLAYER SCORE
+    const speed = (1 + this.player.score) / 4;
+
+    // Add images to the array
+    if (this.row.length < 1) {
+      // Add CATS and BOMBS : 10
+      for (let i = 0; i <= 10; i++) {
+        this.row.push(new Cat(this, this.columns[randomNumber(0, 2)], 30, 80, 130, randomNumber(4, 6) + speed, randomNumber(0, 4)));
+        this.row.push(new Bomb(this, this.columns[randomNumber(0, 2)], 30, 80, 130, randomNumber(4, 6) + speed, randomNumber(0, 2)));
+      }
+      // Add Parachute : 1
+      this.row.push(new Joker(this, this.columns[randomNumber(0, 2)], 30, 80, 130, randomNumber(4, 6) + speed, 0));
     }
-    
-    for (let cat of this.cats) {
-      cat.runLogic();
 
-      // Player catches a kitten
-      const intersecting = cat.checkIntersection(this.player);
+    // Remove extra images added
+    shuffle(this.row);
+    this.row.splice(3, this.row.length - 3);
+
+    // Check for images on the same column
+    for (let i = 0; i < this.row.length - 1; i++) {
+      if (this.row[i].x === this.row[i + 1].x) {
+        this.row.splice(i, 1);
+      }
+    }
+
+    // Run Logic
+    for (let image of this.row) {
+      image.runLogic();
+
+      // Colision detection
+      const intersecting = this.player.checkIntersection(image);
       if (intersecting) {
-        const index = this.cats.indexOf(cat);
-        // Increase player score        
-        if (cat.image.src.includes('cat')) {
+        const index = this.row.indexOf(image);
+        // Player catches a kitten
+        if (image.src.includes('cat')) {
           this.player.score++;
           this.player.score > this.player.highscore ? (this.player.highscore = this.player.score) : '';
           pop.play();
-          // Remove cat from array of cats
-          this.cats.splice(index, 1);
-        } 
-        else if (cat.image.src.includes('butter')) {
+          // Remove cat from array of row
+          this.row.splice(index, 1);
+        } else if (image.src.includes('joker')) {
           this.player.joker++;
-          // Remove butter from array of cats
-          this.cats.splice(index, 1);
-        }        
+          // Remove joker from array of row
+          this.row.splice(index, 1);
+        }
+        // GAME OVER - Hits a BOMB
         else {
-          // GAME OVER
+          xplode.play();
+          this.row.splice(index, 1);
+          this.row.push(new Explosion(this, this.player.x - 50, this.player.y - 150, 500, 190, speed, 0));
+          this.bomb = true;
           this.loseGame();
         }
-        console.log(this.player.score);
       }
+      console.log(this.player.score);
 
-      // Kittens dropping canvas
-      if (cat.y > canvasElement.height) {
-        if (cat.image.src.includes('cat')) {
+      // Images dropping canvas
+      if (image.y > canvasElement.height) {
+        if (image.src.includes('cat')) {
           this.player.lostKittens++;
-          this.player.joker > 0 ? this.player.joker-- : this.loseGame();
-          const index = this.cats.indexOf(cat);
-          this.cats.splice(index, 1);
+          if (this.player.joker > 0) {
+            this.player.joker--;
+          } else {
+            // GAMEOVER - LOSES a CAT
+            this.loseGame();
+            this.lostKitten = true;
+          }
+          const index = this.row.indexOf(image);
+          this.row.splice(index, 1);
           miau.play();
         } else {
-          const index = this.cats.indexOf(cat);
-          this.cats.splice(index, 1);
+          const index = this.row.indexOf(image);
+          this.row.splice(index, 1);
         }
       }
+
+      // snd.play(); // ----> TURN THIS ON
     }
 
-
-    // Remove kittens on the same column
-    for (let i = 0; i < this.cats.length; i++) {
-      if (this.cats[i].x === this.cats[this.cats.length - 1]) {
-        this.cats.splice(i, 1);
-      }
+    if (this.player.score >= 15) {
+      this.levelUp();
     }
+  }
 
-    
-
-    /*
-    if (this.cats[0].x === this.cats[1].x || this.cats[0].x === this.cats[2].x) {
-      console.log('Intersection nabbb');
-    }
-    */
-    // SPECIAL BONUS: 3 of a kind
-    //console.log(this.fruits[0].imageIndex === this.fruits[1].imageIndex  === this.fruits[2].imageIndex)
-    // console.log(this.fruits.length === 3 && this.fruits[0].imageIndex === this.fruits[1].imageIndex  === this.fruits[2].imageIndex)
-
-    // snd.play(); // ----> TURN THIS ON
+  levelUp() {
+    canvasElement.classList.add('canvas-lvl-up');
   }
 
   clean() {
@@ -137,33 +145,51 @@ class Game {
 
   paint() {
     this.player.paint();
-    for (let cat of this.cats) {
-      cat.paint();
+    for (let image of this.row) {
+      image.paint();
     }
     this.scoreboard.paint();
+
+    // Hit a BOMB
+    if (!this.running && this.bomb === true && this.lostKitten === false) {
+      context.save();
+      context.font = '80px Righteous';
+      context.fillStyle = 'firebrick';
+      context.fillText('BAMMM!', 230, 300, 300, 200);
+      context.fillStyle = '#fff';
+      context.font = '40px Righteous';
+      context.fillText('Hit the SPACE BAR to save more kittens', 130, 350, 500, 200);
+      context.restore();
+    }
+    if (!this.running && this.lostKitten === true) {
+      context.save();
+      context.font = '80px Righteous';
+      context.fillStyle = 'firebrick';
+      context.fillText('OH NOESSS', 230, 300, 300, 200);
+      context.fillStyle = '#fff';
+      context.font = '40px Righteous';
+      context.fillText('Hit the SPACE BAR to save more kittens', 130, 350, 500, 200);
+      context.restore();
+    }
   }
-  
+
   loseGame() {
     // alert('Lost game');
     //loosingNoise.play();
 
-    context.save();
-    context.fillStyle = 'black';
-    context.fillRect(0, 0, 500, 500);
-    context.restore();
-
     this.running = false;
-    if (this.loopId) {
-      clearTimeout(this.loopId);
-    }
   }
 
   restartGame() {
+    this.row = [];
     this.player.score = 0;
     this.player.lostKittens = 0;
     this.player.joker = 0;
     this.player.x = 80;
     this.loop();
+    canvasElement.classList.remove('canvas-lvl-up');
+    this.lostKitten = false;
+    this.bomb = false;
     this.running = true;
   }
 

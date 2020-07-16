@@ -26,4 +26,8 @@ class Basket {
     context.drawImage(this.image, this.x - 30, this.y - 100, this.width, this.height);
     context.restore();
   }
+
+  checkIntersection(image) {
+    return image.x + image.width > this.x && image.x < this.x + this.width && image.y + image.height > this.y - 30 && image.y + 100 < this.y + this.height;
+  }
 }

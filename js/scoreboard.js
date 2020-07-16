@@ -18,7 +18,7 @@ class Scoreboard {
     context.fillText('HighScore: ' + highscore, 484, 90);
 
     context.fillText('Lost Kittens: ' + lostKittens, 30, 50);
-    context.fillText('Joker: ' + joker, 30, 90);
+    context.fillText('Parachutes: ' + joker, 30, 90);
 
     context.restore();
   }

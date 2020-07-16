@@ -11,8 +11,7 @@ body {
   background-size: cover;
   background-position: center;
   background-color: rgb(109, 38, 38);
-  font-family: Roboto, Arial, sans-serif;  
-  
+  font-family: Roboto, Arial, sans-serif;
 }
 
 .game-intro {
@@ -21,6 +20,7 @@ body {
   justify-content: center;
   align-items: center;
   padding-top: 7%;
+  /* display: none; ********** REMOVE THIS */
 }
 
 .logo-img {
@@ -30,33 +30,33 @@ body {
 h1 {
   font-family: Righteous, Arial, sans-serif;
   font-size: 4em;
-  color: #9F8062;
+  color: #9f8062;
   margin-top: 10px;
   margin-bottom: 46px;
   letter-spacing: 4px;
 }
 
 .button {
-  background-color: #073D08;
-	border-radius:28px;
-	border:1px solid #073D08;
-	display:inline-block;
-	cursor:pointer;
-	color:#ffffff;
-	font-family:Arial;
-  font-size:16px;
+  background-color: #073d08;
+  border-radius: 28px;
+  border: 1px solid #073d08;
+  display: inline-block;
+  cursor: pointer;
+  color: #ffffff;
+  font-family: Arial;
+  font-size: 16px;
   letter-spacing: 1px;
-	padding:16px 31px;
-	text-decoration:none;
-	text-shadow:0px 1px 0px #2f6627;
+  padding: 16px 31px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #2f6627;
 }
 .button:hover {
-  background-color: #225C24;
-  border:1px solid #225C24;
+  background-color: #225c24;
+  border: 1px solid #225c24;
 }
 .button:active {
-	position:relative;
-	top:1px;
+  position: relative;
+  top: 1px;
 }
 
 .rules {
@@ -65,7 +65,7 @@ h1 {
   width: 700px;
   text-align: center;
   color: white;
-  margin: 6% auto 0 auto;  
+  margin: 6% auto 0 auto;
 }
 
 h2 {
@@ -96,13 +96,13 @@ p {
 }
 
 .btn-light {
-  background-color: #225C24;
-  border:1px solid #225C24;
+  background-color: #225c24;
+  border: 1px solid #225c24;
 }
 
 .btn-light:hover {
   background-color: #316d33;
-  border:1px solid #316d33;
+  border: 1px solid #316d33;
 }
 
 .row {
@@ -124,6 +124,13 @@ p {
 canvas {
   margin: 5% 30%;
   background-color: rgb(56, 56, 56, 0.3);
+}
+
+.canvas-lvl-up {
+  background-image: url('../images/canvas-background.jpg');
+  background-repeat: no-repeat;
+
+  background-position: center;
 }
 
 .none {
