@@ -3,15 +3,48 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CHANGE THIS</title>
+    <title>Flying Kittens</title>
     <link rel="stylesheet" href="css/style.css" />
   </head>
 
   <body>
-    <canvas id="game" width="700" height="600"></canvas>
-    <script src="js/basket.js"></script>
-    <script src="js/fruits.js"></script>
+    <div class="game-intro">
+      <img src="./images/cat1.png" alt="" class="logo-img" />
+      <h1>Flying Kittens</h1>
+      <a id="see-rules" href="#" class="button">Rules</a>
+    </div>
+    <div id="rules" class="rules none">
+      <h2>Hello Cat Lover!</h2>
+      <p>Your mission today is to save all the kittens from falling from the sky.</p>
+      <img src="images/cat1.png" class="cat" alt="cat" />
+      <img src="images/cat2.png" class="cat" alt="cat" />
+      <img src="images/cat3.png" class="cat" alt="cat" />
+      <img src="images/cat5.png" class="cat" alt="cat" />
+      <img src="images/cat6.png" class="cat" alt="cat" />
+      <h3>1 Kitten = 1 Point</h3>
+      <h3>Safezone = You lose 3 Points</h3>
+      <h3>Run away from the bombs</h3>
+      <img src="images/bomb.png" class="bomb" alt="bomb" />
+      <img src="images/explosives.png" class="bomb" alt="bomb" />
+      <img src="images/bigorna.png" class="bomb" alt="bomb" />
+      <p>Be vewy vewy carefull not to drop any kitten on the ground!</p>
+      <a id="start-game" href="#" class="button btn-light">Start Game</a>
+    </div>
+    <div id="canvas-game" class="none">
+      <div class="row">
+        <div class="col">
+          <img class="keyboard" src="./images/keyboard.png" alt="keyboard keys" />
+          <p>Use your keyboard keys to move left and right.</p>
+          <p>Use your <strong>SPACE BAR</strong> to start and restart the game.</p>
+        </div>
+        <div class="col">
+          <canvas id="game" width="760" height="600"></canvas>
+        </div>
+      </div>
+    </div>
     <script src="js/scoreboard.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/cats.js"></script>
     <script src="js/game.js"></script>
     <script src="js/script.js"></script>
   </body>
