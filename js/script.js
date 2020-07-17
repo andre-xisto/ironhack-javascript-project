@@ -7,6 +7,11 @@ window.addEventListener('load', () => {
     document.getElementById('rules').classList.remove('none');
   };
 
+  document.getElementById('see-rules-canvas').onclick = function () {
+    document.getElementById('canvas-game').classList.add('none');
+    document.getElementById('rules').classList.remove('none');
+  }
+  
   document.getElementById('start-game').onclick = function () {
     document.getElementById('rules').classList.add('none');
     document.getElementById('canvas-game').classList.remove('none');

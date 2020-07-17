@@ -136,7 +136,7 @@ canvas {
 .canvas-lvl-2 {
   background-image: url('../images/canvas-bg-2-level.jpg');
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: top left;
 }
 .canvas-lvl-3 {
   background-image: url('../images/canvas-bg-3-level.jpg');
